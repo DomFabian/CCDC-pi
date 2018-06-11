@@ -29,14 +29,12 @@ for s1 in [False, True]:
                                         net12 = not (net10 ^ net10 ^ net11)
                                         net13 = not (s1 or s4 or s6 or s7 or s10)
                                         net14 = net12 and net13
-                                        net15 = net14 and s9
-                                        output = net15
+                                        net15 = net14 and s9 and s8                                        output = net15
 
                                         if output:
-                                            print(s1,s2,s3,s4,s5,s6,s7,s8,s8,s10, sep='\t')
+                                            print(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10, sep='\t')
                                             counter += 1
 
 print()
-print(str(counter), str(total))
 print('And ' + str((counter / total) * 100) + '% of combinations work.')
 
