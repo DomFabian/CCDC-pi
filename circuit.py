@@ -34,8 +34,6 @@ def get_switch_config(switch):
         ret += str(io.input(s))
     return ret
 
-print(get_switch_config(switch))
-
 def is_valid_config(config, solutions):
     ''' This function takes the current switch config as a
         string and the list of solutions (also strings) and
@@ -60,4 +58,4 @@ while True:
         io.output(led_red, io.LOW)
         io.output(led_green, io.HIGH)
     
-    sleep(2)
+    time.sleep(2)
