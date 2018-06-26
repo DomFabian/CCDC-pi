@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 ''' Calculate all of the solutions to the puzzle and then
     write them to a file for input to another program. '''
 
 # open the file
-filename = 'puzzle_solns'
+filename = 'solns'
 my_file = open(filename, 'w')
 
 
@@ -26,7 +27,7 @@ for s1 in [False, True]:
                             output = not net10
 
                             if output:
-                                my_file.write("%d\t%d\t%d\t%d\t%d\t%d\t%d\n"
+                                my_file.write("%d%d%d%d%d%d%d\n"
                                               % (s1,s2,s3,s4,s5,s6,s7))
 
 my_file.close()

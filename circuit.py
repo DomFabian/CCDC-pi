@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import time
 import RPi.GPIO as io
 
@@ -19,9 +20,9 @@ for s in switch:
     io.setup(s, io.IN, pull_up_down=io.PUD_DOWN)
 
 # read from the solution file
-filename = 'solns'
+filename = '/home/pi/CCDC-pi/solns'
 
-solutions = []
+solutions = [line.strip() for line in open(filename, 'r')]
 
 def get_switch_config(switch):
     ''' This function gets the current switch configuartion
@@ -57,5 +58,9 @@ while True:
     if is_valid_config(config, solutions):
         io.output(led_red, io.LOW)
         io.output(led_green, io.HIGH)
-    
-    time.sleep(2)
+    else:
+        io.output(led_red, io.HIGH)
+        io.output(led_green, io.LOW)
+    time.sleep(0.25)
+    io.output(led_yellow, io.LOW)
+    time.sleep(1.5)
