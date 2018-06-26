@@ -16,7 +16,7 @@ io.setup(led_yellow, io.OUT)
 io.setup(led_red, io.OUT)
 
 for s in switch:
-    io.setup(s, io.IN)
+    io.setup(s, io.IN, pull_up_down=io.PUD_DOWN)
 
 # read from the solution file
 filename = 'solns'
@@ -50,8 +50,14 @@ def is_valid_config(config, solutions):
             return True
     return False
 
+io.output(led_green, io.LOW)
+io.output(led_yellow, io.LOW)
+io.output(led_red, io.HIGH)
 while True:
-    
-    
+    io.output(led_yellow, io.HIGH)
+    config = get_switch_config(switch)
+    if is_valid_config(config, solutions):
+        io.output(led_red, io.LOW)
+        io.output(led_green, io.HIGH)
     
     sleep(2)
