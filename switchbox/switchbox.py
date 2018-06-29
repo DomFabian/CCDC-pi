@@ -8,7 +8,7 @@ io.setwarnings(False)
 # define the pins
 # Note: wire = [RED,YLW,GRN,BLU,BLK,WHT]
 wire = [11,13,15,19,21,23]
-led_gree = 5
+led_green = 5
 led_red = 7
 
 for w in wire:
@@ -16,7 +16,7 @@ for w in wire:
 io.setup(led_green, io.OUT)
 io.setup(led_red, io.OUT)
 
-solution = [1,1,1,1,1,1]
+solution = '111111'
 
 def get_wire_config(wire):
     ''' This function reads the pins connected to
@@ -27,9 +27,18 @@ def get_wire_config(wire):
     
     ret = ''
     for w in wire:
-        ret += io.input(w)
-
+        ret += str(io.input(w))
+    print(ret)
     return ret
 
+io.output(led_red, io.HIGH)
+io.output(led_green, io.LOW)
 while True:
-    if
+    if get_wire_config(wire) == solution:
+        io.output(led_red, io.LOW)
+        io.output(led_green, io.HIGH)
+    else:
+        io.output(led_red, io.HIGH)
+        io.output(led_green, io.LOW)
+
+    time.sleep(1)
