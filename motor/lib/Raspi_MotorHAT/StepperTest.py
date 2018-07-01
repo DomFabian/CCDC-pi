@@ -18,11 +18,23 @@ def turnOffMotors():
 atexit.register(turnOffMotors)
 
 myStepper = mh.getStepper(200, 1)  	# 200 steps/rev, motor port #1
-myStepper.setSpeed(30)  		# 30 RPM
+myStepper.setSpeed(300)  		# 30 RPM
 
 while (True):
+        # There seems to be a delay between the .step() call and the motor's motion.
+        # The sleep() call is just to see which one is single and which is double.
+        # I guess I gotta look up what all this means. Dang.
 	print("Single coil steps")
-	myStepper.step(100, Raspi_MotorHAT.FORWARD,  Raspi_MotorHAT.SINGLE)
+        myStepper.step(1000, Raspi_MotorHAT.FORWARD,  Raspi_MotorHAT.SINGLE)
+        time.sleep(3)
+	print("Double coil steps")
+	myStepper.step(1000, Raspi_MotorHAT.FORWARD,  Raspi_MotorHAT.DOUBLE)
+        time.sleep(3)
+
+# Original code:
+while (True):
+	print("Single coil steps")
+        myStepper.step(100, Raspi_MotorHAT.FORWARD,  Raspi_MotorHAT.SINGLE)
 	myStepper.step(100, Raspi_MotorHAT.BACKWARD, Raspi_MotorHAT.SINGLE)
 
 	print("Double coil steps")
