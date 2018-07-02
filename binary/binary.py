@@ -49,7 +49,6 @@ def is_correct_solution():
         the function returns False. '''
 
     filename = '/home/pi/CCDC-pi/binary/binary_soln'
-
     try:
         f = open(filename, 'r')
         return True
