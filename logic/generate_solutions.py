@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
+''' Calculate all of the solutions to the puzzle and then
+    write them to a file for input to another program. '''
 
-print("Successful combinations are:")
-print("s1:\ts2:\ts3:\ts4:\ts5:\ts6:\ts7:\ts8:\ts9:\ts10:")
-
-counter = 0
-total = 2 ** 10
+# open the file
+filename = '/home/pi/CCDC-pi/logic/solns'
+my_file = open(filename, 'w')
 
 for s1 in [False, True]:
     for s2 in [False, True]:
@@ -24,17 +25,18 @@ for s1 in [False, True]:
                                         net7 = not (net3 and net4)
                                         net8 = not (s1 and net5)
                                         net9 = net6 ^ net7
-                                        net10 = s8 or s9 or s10 or net9
-                                        net11 = not net10
-                                        net12 = not (net10 ^ net10 ^ net11)
-                                        net13 = not (s1 or s4 or s6 or s7 or s10)
-                                        net14 = net12 and net13
-                                        net15 = net14 and s9 and s8                                        output = net15
+                                        net10 = net9 or s8 or s9 or s10
+                                        net11 = not (s1 or s4 or s6 or s7 or s10)
+                                        net12 = not net10
+                                        net13 = net10 ^ net10
+                                        net14 = not (net12 ^ net13)
+                                        net15 = net8 and net11 and net14
+                                        net16 = net15 and s8 and s9
+                                        net17 = s2 and net16
+                                        output = net17
 
                                         if output:
-                                            print(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10, sep='\t')
-                                            counter += 1
+                                            my_file.write("%d%d%d%d%d%d%d%d%d%d\n"
+                                                  % (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10))
 
-print()
-print('And ' + str((counter / total) * 100) + '% of combinations work.')
-
+my_file.close()

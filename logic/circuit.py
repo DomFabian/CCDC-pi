@@ -20,7 +20,7 @@ for s in switch:
     io.setup(s, io.IN, pull_up_down=io.PUD_DOWN)
 
 # read from the solution file
-filename = '/home/pi/CCDC-pi/solns'
+filename = '/home/pi/CCDC-pi/logic/solns'
 
 solutions = [line.strip() for line in open(filename, 'r')]
 
