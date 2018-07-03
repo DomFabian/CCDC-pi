@@ -2,6 +2,10 @@
 
 import time
 import RPi.GPIO as io
+from os import remove
+
+guess = '0'
+correct_guess = '377'
 
 io.setmode(io.BOARD)
 io.setwarnings(False)
@@ -18,7 +22,7 @@ for b in bit:
     io.setup(b, io.OUT)
 
 
-def write_binary(num, bit):
+def write_binary(num):
     ''' This function takes a string argument num
         and writes each of the bits to the LED pins.
         The string must be length 8 for the 8 LEDs
@@ -29,7 +33,7 @@ def write_binary(num, bit):
     num = str(num)
     if len(num) != 8:
         return False
-    
+
     for i in range(0,8):
         if num[i] == '1':
             io.output(bit[i], io.HIGH)
@@ -38,43 +42,89 @@ def write_binary(num, bit):
 
     return True
 
-def is_correct_solution():
+
+def blink_good():
+    ''' This function does a quick series of blinks of all
+        of the LEDs that display the binary numbers. '''
+
+    blink_time = .2
+    num_blinks = 3
+    for i in range(0,num_blinks):
+        write_binary('11111111')
+        time.sleep(blink_time)
+        write_binary('00000000')
+        time.sleep(blink_time)
+    write_binary('11111111')
+
+def blink_bad():
+    ''' This function does a quick series of blinks of all
+        of the LEDs that display the binary numbers. '''
+
+    blink_time = 0.02
+    num_blinks = 50
+    for i in range(0,num_blinks):
+        write_binary('11111111')
+        time.sleep(blink_time)
+        write_binary('00000000')
+        time.sleep(blink_time)
+
+def new_solution_available():
     ''' When sending the solution guesses to this Pi,
         another host will send a file over a network
         to this Pi via SCP. This function checks to see
-        if that file exists. If it does exist, this is
-        interpretted as having the correct solution entered
-        on the other host and the function returns True.
-        Otherwise, the puzzle has not yet been solved and
-        the function returns False. '''
+        if that file exists. If it does exist, the contents
+        of the file are placed in global variable 'guess'
+        then delete the file.
+        Return True if a new solution file was present,
+        False otherwise. '''
 
+    global guess
     filename = '/home/pi/CCDC-pi/binary/binary_soln'
     try:
         f = open(filename, 'r')
+        guess = f.readline().strip()
+        f.close()
+        remove(filename)
         return True
     except:
-        return False
-    
+        pass
+    return False
+
+def indicate_success():
+    ''' Set the red/green LEDs to the success state. '''
+    io.output(led_green, io.HIGH)
+    io.output(led_red, io.LOW)
+
+def indicate_failure():
+    ''' Set the red/green LEDs to the failure state. '''
+    io.output(led_green, io.LOW)
+    io.output(led_red, io.HIGH)
+
 
 fibonacci = ['00000000', '00000001', '00000001', '00000010', '00000011', '00000101', '00001000',
              '00001101', '00010101', '00100010', '00110111', '01011001', '10010000', '11101001']
 
-write_binary('00000000', bit)
-io.output(led_red, io.HIGH)
-io.output(led_green, io.LOW)
-flag = False
-while not flag:
-    for num in fibonacci:
-        if is_correct_solution():
-            flag = True
-            break
-        write_binary(num, bit)
-        time.sleep(2)
-        write_binary('00000000', bit)
-        time.sleep(1)
-    time.sleep(2)
+write_binary('00000000')
+indicate_failure()
 
-write_binary('11111111', bit)
+index = 0
+while True:
+    if new_solution_available():
+        if guess == correct_guess:
+            indicate_success()
+            blink_good()
+        else:
+            indicate_failure()
+            blink_bad()
+
+    if guess != correct_guess:
+        write_binary(fibonacci[index])
+        index = (index + 1) % len(fibonacci)
+        time.sleep(2)
+        write_binary('00000000')
+
+    time.sleep(1)
+
 io.output(led_green, io.HIGH)
 io.output(led_red, io.LOW)
 
