@@ -6,6 +6,6 @@
 ## 10.10.10.10: motor-driving Raspberry Pi
 ## 10.10.10.11: logic puzzle/binary sequence Raspberry Pi
 
-sshpass -f "/home/pi/key" ssh 10.10.10.11 echo '123' '>' /home/pi/CCDC-pi/binary/binary_soln
+ssh 10.10.10.11 echo '123' '>' /home/pi/CCDC-pi/binary/binary_soln
 
 exit 0
