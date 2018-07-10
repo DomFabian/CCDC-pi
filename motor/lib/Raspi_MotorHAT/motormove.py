@@ -56,7 +56,7 @@ if __name__ == '__main__':
 	atexit.register(turnOffMotors)
 
         if len(sys.argv) < 3:
-                print("Usage: motorup.py <motor-number-1-4> <b(ackward)|f(orward)>")
+                print("Usage: motorup.py <motor-number-1-4> <b(ackward)|f(orward)> [speed(50)] [seconds(0)]")
                 exit(1)
 
         mot = int(sys.argv[1])
@@ -75,16 +75,24 @@ if __name__ == '__main__':
         if dir_letter == 'f':
                 direction = Raspi_MotorHAT.FORWARD
 
-        sys.stdout.write("Hit Ctrl-C to stop....")
-        sys.stdout.flush()
+        speed = 50
+        if len(sys.argv) > 3:
+                speed = int(sys.argv[3])
 
-	#turn on all the green lights at start
+        duration = 0
+        if len(sys.argv) > 4:
+                duration = float(sys.argv[4])
+
+        #turn on all the green lights at start
         GPIO.output(LEDr[mot],1)
         GPIO.output(LEDg[mot],1)
-        motor = mh.getMotor(mot)
-        motor.setSpeed(50)
-        motor.run(direction)
 
-        while True:
-                time.sleep(1)
+        print("Running at speed {} for {} seconds (0=forever).".format(speed, duration))
+        motor = mh.getMotor(mot)
+        motor.setSpeed(speed)
+        motor.run(direction)
+        if duration == 0:
+                s = raw_input("Hit Enter or Ctrl-C to stop....")
+        else:
+                time.sleep(duration)
         exit(0)
