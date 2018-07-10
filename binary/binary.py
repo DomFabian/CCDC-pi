@@ -100,12 +100,24 @@ def indicate_failure():
     io.output(led_green, io.LOW)
     io.output(led_red, io.HIGH)
 
+STATE_FILE = "/home/pi/CCDC-pi/binary/state.txt"
+
+def write_state(state):
+    ''' Write the value of 'state' on a line to the puzzle's state file. '''
+
+    try:
+        f = open(STATE_FILE, 'w')
+        f.write(str(state) + '\n')
+        f.close()
+    except:
+        pass
 
 fibonacci = ['00000000', '00000001', '00000001', '00000010', '00000011', '00000101', '00001000',
              '00001101', '00010101', '00100010', '00110111', '01011001', '10010000', '11101001']
 
 write_binary('00000000')
 indicate_failure()
+write_state('running')
 
 index = 0
 while True:
@@ -113,7 +125,9 @@ while True:
         if guess == correct_guess:
             indicate_success()
             blink_good()
+            write_state('solved')
         else:
+            write_state('running-{}'.format(guess))
             indicate_failure()
             blink_bad()
 
@@ -127,4 +141,3 @@ while True:
 
 io.output(led_green, io.HIGH)
 io.output(led_red, io.LOW)
-

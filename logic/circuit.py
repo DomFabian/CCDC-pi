@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import time
+import os
 import RPi.GPIO as io
+import time
 
 io.setmode(io.BOARD)
 io.setwarnings(False)
@@ -49,18 +50,34 @@ def is_valid_config(config, solutions):
             return True
     return False
 
+STATE_FILE = "/home/pi/CCDC-pi/logic/state.txt"
+
+def write_state(state):
+    ''' Write the value of 'state' on a line to the puzzle's state file. '''
+
+    try:
+        f = open(STATE_FILE, 'w')
+        f.write(str(state) + '\n')
+        f.close()
+    except:
+        pass
+
+write_state('running')
 io.output(led_green, io.LOW)
 io.output(led_yellow, io.LOW)
 io.output(led_red, io.HIGH)
+
 while True:
     io.output(led_yellow, io.HIGH)
     config = get_switch_config(switch)
     if is_valid_config(config, solutions):
         io.output(led_green, io.HIGH)
         io.output(led_red, io.LOW)
+        write_state('solved')
     else:
         io.output(led_green, io.LOW)
         io.output(led_red, io.HIGH)
+        write_state('running')
     time.sleep(0.25)
     io.output(led_yellow, io.LOW)
     time.sleep(1.5)
