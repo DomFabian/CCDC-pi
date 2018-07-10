@@ -8,6 +8,8 @@ import time
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
+MOTORS = 4
+
 LED1r = 8
 LED1g = 10
 LED2r = 11
@@ -52,9 +54,6 @@ def turnOffMotors():
 	GPIO.output(LED4g, 0)
 
 if __name__ == '__main__':
-        turnOffMotors()
-	atexit.register(turnOffMotors)
-
         if len(sys.argv) < 3:
                 print("Usage: motorup.py <motor-number-1-4> <b(ackward)|f(orward)> [speed(50)] [seconds(0)]")
                 exit(1)
@@ -83,9 +82,16 @@ if __name__ == '__main__':
         if len(sys.argv) > 4:
                 duration = float(sys.argv[4])
 
-        #turn on all the green lights at start
-        GPIO.output(LEDr[mot],1)
-        GPIO.output(LEDg[mot],1)
+        # Stop all the motors. Not sure if this is good or not.
+        turnOffMotors()
+        # On exit turn off all motors too.
+	atexit.register(turnOffMotors)
+
+        # Turn off all the LEDs except ours.
+        for i in range(1, MOTORS + 1):
+                val = 1 if i == mot else 0
+                GPIO.output(LEDr[i], val)
+                GPIO.output(LEDg[i], val)
 
         print("Running at speed {} for {} seconds (0=forever).".format(speed, duration))
         motor = mh.getMotor(mot)
