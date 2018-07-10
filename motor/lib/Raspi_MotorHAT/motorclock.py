@@ -74,7 +74,7 @@ STATE_FILE = "/tmp/motorclock.state"
 
 def write_state(state):
         try:
-                f = open(STATE_FILE)
+                f = open(STATE_FILE, "w")
                 f.write(state + '\n')
                 f.close()
                 subprocess.call(["/bin/chmod", "a+w", STATE_FILE])
