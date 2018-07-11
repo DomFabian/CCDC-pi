@@ -43,8 +43,8 @@ mh = Raspi_MotorHAT(addr=0x6f)
 def turnOffMotors():
        for i in range(1, 4):
                 mh.getMotor(i).run(Raspi_MotorHAT.RELEASE)
-                GPIO.output(LEDg[i],1)
-                GPIO.output(LEDr[i],0)
+                GPIO.output(LEDr[i],1)
+                GPIO.output(LEDg[i],0)
 
 MOTORS = 4
 MOTOR_SEGMENTS = 4
