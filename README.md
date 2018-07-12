@@ -43,16 +43,16 @@ Challenges
 
 Note: the scripts expect the various state and auxiliary file to be located in the same directory, so be mindful of this when moving around or renaming files!
 
-* Logic Puzzle (toggle switches with logic gate schematic)
+* **Logic Puzzle (toggle switches with logic gate schematic)**  
     The `logic` directory contains all of the code for this puzzle. `generate_solutions.py` creates a file called `solns` used by `circuit.py`, which contains all of the possible correct answers to the puzzle. Since there are 10 switches, there are 1024 possible switch configurations of ON or OFF. Our circuit generated 4 correct solutions, in order to make the puzzle challenging enough. It is safe to tweak the logic outlined in `generate_solutions.py` so that it creates a larger or smaller solution set without affecting the performance of `circuit.py`.
 
-* Binary Puzzle (Fibonacci numbers)
+* **Binary Puzzle (Fibonacci numbers)**  
     The `binary` directory contains all of the code for this puzzle. `binary.py` is the code that actually lights up the LEDs on the board to display the Fibonacci number sequence and writes the state of the program to a file. It will loop to check if a guess has been made and then write the state accordinging. The other two files in the directory send signals to the control device based on the status written to this file and read from the guesses from the keypad. The binary puzzle code involves two Raspberry Pis: one runs the LEDs and one runs the keypad. Every incorrect guess made on the keypad triggers a "punishment video," which is a really obnoxious video that goes up on one of the large screens in the room. This punishment video is managed by the controller device.
 
-* Pick Lock or Find Key
+* **Pick Lock or Find Key**  
     This puzzle is pretty self-explanatory. The lock pick kit was "hidden" in an obvious place in the room, while the key to the lock was hidden inside Bob's tie knot. Clues were given in the room about the location of this key, but they were kept vague to encourage the use of the lock picks.
 
-* Switchbox Puzzle (wire cutting)
+* **Switchbox Puzzle (wire cutting)**  
     Once the lock is picked or opened, the safety switch box can be opened. Inside are 6 colorful wires with labels about what each wire signifies. On the side of the panel is the actual safety switch itself, which must be turned to ON in order for the puzzle to be solved. The code for this puzzle can be found in the `switchbox` directory. There is only one file, `switchbox.py`, which controls this puzzle. This script will continuously checks the wire configuration (cutting the green and black wires is the current solution) and writes the appropriate state to a state file. The controller device will poll for this state file.
 
 Misc.
